@@ -46,17 +46,23 @@ for i in readin:
     # print(line)
     # print(isLabel)
     # print(line[isLabel])
+    if(line[isLabel] not in specialOP and line[isLabel] not in b):
+        print("wrong input")
+        exit()
     if(line[isLabel] not in specialOP):
         for j in range (4): 
             it = j
             if(j == 3 and line[it+isLabel] in a):
                 # print(a[line[it+isLabel]])
                 line[it+isLabel] = a[line[it+isLabel]]
+            
             operation.append(line[it+isLabel])
     elif line[isLabel] == ".fill" :
         operation.append(line[isLabel])
+        
         if(line[isLabel+1] in a):
             line[isLabel+1] = a[line[isLabel+1]]
+       
         operation.append(line[isLabel+1])
     else: operation.append(line[isLabel])
     # print(operation)
