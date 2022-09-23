@@ -29,7 +29,7 @@ for i in readin:
     line = i.split(" ")
     line[len(line)-1] = line[len(line)-1].replace("\n","")
     if (line[0] not in b): 
-        a.update({line[0]:s})
+        a.update({line[0]:str(s)})
     s+=1 
 print(a) 
 
