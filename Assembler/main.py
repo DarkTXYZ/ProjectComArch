@@ -1,5 +1,5 @@
 input = open('Assembler\input.txt' , 'r')
-
+# print(input.readlines())
 readin = input.readlines()
 
 
@@ -17,11 +17,11 @@ readin = input.readlines()
 a = {}
 b = ["add","nand","lw","sw","beq","jalr","halt","noop"]
 s= 0
-print(readin)
+
 for i in readin:
     spl = i.split(" ")[0] 
-    print(i)
-    if (spl not in b) and i != "noop": 
+    # print(i)
+    if (spl not in b) and i != "noop\n": 
         a.update({spl:s})
         print(spl)
     print(s)
