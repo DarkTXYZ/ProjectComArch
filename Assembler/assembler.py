@@ -1,4 +1,4 @@
-def Assembler(op, f0 = None, f1 = None, f2 = None):
+def Assembler(inst):
     """This function encodes assembly to binary machine code
 
     Args:
@@ -10,23 +10,58 @@ def Assembler(op, f0 = None, f1 = None, f2 = None):
     Returns:
         str: binary machine code
     """
-    if op == 'add':
+    op = inst[0]
+    if(len(inst) >= 2):
+        f0 = inst[1]
+    if(len(inst) >= 3):
+        f1 = inst[2]
+    if(len(inst) >= 4):
+        f2 = inst[3]
+
+    if op == 'add' or op == 'nand':
         return R_type(op, f0, f1, f2)
+    elif op == 'jalr':
+        return J_type(f0, f1)
+    elif op == '.fill':
+        return f0
     else:
-        return 'can\'t encode'
+        return 'wrong operation'
 
 
 def R_type(op, f0, f1, f2):
-    return op
+    bit = 0
+    if op == 'add':
+        bit21_19 = int(f0) << 19
+        bit18_16 = int(f1) << 16
+        bit2_0 = int(f2)
+
+        bit = bit21_19 + bit18_16 + bit2_0
+
+    elif op == 'nand':
+        bit24_22 = 1 << 22
+        bit21_19 = int(f0) << 19
+        bit18_16 = int(f1) << 16
+        bit2_0 = int(f2)
+
+        bit = bit24_22 + bit21_19 + bit18_16 + bit2_0
+
+    return bit
 
 
 def I_type(op, f0, f1, f2):
     pass
 
 
-def J_type(op, f0, f1):
-    pass
+def J_type(f0, f1):
+    bit24_22 = 5 << 22
+    bit21_19 = int(f0) << 19
+    bit18_16 = int(f1) << 16
+
+    bit = bit24_22 + bit21_19 + bit18_16
+
+    return bit
 
 
 def O_type(op):
     pass
+    
