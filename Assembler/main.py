@@ -1,6 +1,8 @@
 input = open('Assembler\input.txt' , 'r')
 
-print(input.readlines())
+readin = input.readlines()
+
+
 
 # a = Assembler('','','','','')
 
@@ -12,15 +14,18 @@ print(input.readlines())
 #     'rs2' : '' ,
 #     'imm' : '' 
 # }
-
-a = [1,2,3]
-
-if 4 in a :
-    print('yes')
-
-for i in range(10) :
+a = {}
+b = ["add","nand","lw","sw","beq","jalr","halt","noop"]
+s= 0
+print(readin)
+for i in readin:
+    spl = i.split(" ")[0] 
     print(i)
-
+    if (spl not in b) and i != "noop": 
+        a.update({spl:s})
+        print(spl)
+    print(s)
+    s+=1
 # for loop เก็บ label 
 # for loop วนอ่านคำสั่ง
     # คำสั่งมี label , instruction , rs1 , ...
