@@ -2,10 +2,11 @@ def Assembler(inst):
     """This function encodes assembly to binary machine code
 
     Args:
-        op (str): operation
-        f0 (int): field0 -> regA
-        f1 (int): field1 -> regB
-        f2 (int): field2 -> destReg , offsetField , symbolicAddress
+        List of string contains
+            - op (str): operation
+            - f0 (int): field0 -> regA
+            - f1 (int): field1 -> regB
+            - f2 (int): field2 -> destReg , offsetField , symbolicAddress
 
     Returns:
         str: binary machine code
@@ -23,14 +24,15 @@ def Assembler(inst):
     elif op == 'jalr':
         return J_type(f0, f1)
     elif op == '.fill':
-        return f0
+        return int(f0)
     else:
-        return 'wrong operation'
+        return 'not implement yet'
 
 
 def R_type(op, f0, f1, f2):
     bit = 0
     if op == 'add':
+        bit24_22 = int('000',2) << 22
         bit21_19 = int(f0) << 19
         bit18_16 = int(f1) << 16
         bit2_0 = int(f2)
@@ -38,7 +40,7 @@ def R_type(op, f0, f1, f2):
         bit = bit21_19 + bit18_16 + bit2_0
 
     elif op == 'nand':
-        bit24_22 = 1 << 22
+        bit24_22 = int('001',2) << 22
         bit21_19 = int(f0) << 19
         bit18_16 = int(f1) << 16
         bit2_0 = int(f2)
@@ -53,7 +55,7 @@ def I_type(op, f0, f1, f2):
 
 
 def J_type(f0, f1):
-    bit24_22 = 5 << 22
+    bit24_22 = int('101' , 2) << 22
     bit21_19 = int(f0) << 19
     bit18_16 = int(f1) << 16
 
