@@ -26,7 +26,7 @@ def Assembler(inst):
     elif op == 'jalr':
         return J_type(f0, f1)
     elif op == 'halt' or op == 'noop':
-        return O_type(op, f0, f1, f2)
+        return O_type(op)
     elif op == '.fill':
         return int(f0)
     else:

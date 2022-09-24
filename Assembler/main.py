@@ -70,7 +70,7 @@ for i in readin:
 
 for i in allLines:
     machineCode = Assembler(i)
-    print(machineCode)
+    print(i , machineCode)
     output.write(str(machineCode) + '\n')
 
 # for loop เก็บ label

@@ -1,11 +1,10 @@
-not implement yet
-not implement yet
+8454151
+9043971
 655361
-not implement yet
-not implement yet
-not implement yet
-not implement yet
-not implement yet
+16842754
+16777218
+29360128
+25165824
 5
 -1
 2
