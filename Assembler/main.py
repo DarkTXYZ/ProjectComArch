@@ -29,10 +29,10 @@ for i in readin:
     line = i.split(" ")
     line[len(line)-1] = line[len(line)-1].replace("\n","")
     if (line[0] not in b): 
-        a.update({line[0]:str(s)})
+        a.update({line[0]:s})
     s+=1 
 print(a) 
-
+s=0
 for i in readin:
     operation = []
     line = i.split(" ")
@@ -54,19 +54,23 @@ for i in readin:
             it = j
             if(j == 3 and line[it+isLabel] in a):
                 # print(a[line[it+isLabel]])
-                line[it+isLabel] = a[line[it+isLabel]]
+                if(line[isLabel] == 'beq'):
+                    line[it+isLabel] = str(a[line[it+isLabel]]-s-1)
+                else:
+                    line[it+isLabel] =str(a[line[it+isLabel]])
             
             operation.append(line[it+isLabel])
     elif line[isLabel] == ".fill" :
         operation.append(line[isLabel])
         
         if(line[isLabel+1] in a):
-            line[isLabel+1] = a[line[isLabel+1]]
+            line[isLabel+1] = str(a[line[isLabel+1]])
        
         operation.append(line[isLabel+1])
     else: operation.append(line[isLabel])
     # print(operation)
     allLines.append(operation)
+    s+=1
 # print(allLines)
 # print(a)
 for i in allLines:
