@@ -1,4 +1,4 @@
-# from assembler import Assembler
+from assembler import Assembler
 
 from numpy import true_divide
 
@@ -74,16 +74,10 @@ for i in readIn:
     count+=1
     allLines.append(operation)
 
-
-def numcheck(s):
-    try:
-        num = int(s)
-        isNumber = True
-    except:
-        isNumber = False
-    return isNumber
-
-        
+for i in allLines:
+    machineCode = Assembler(i)
+    print(i, machineCode)
+    output.write(str(machineCode) + '\n')
 
 
 
@@ -133,8 +127,4 @@ def numcheck(s):
 #     count += 1
 #Correction Loop
 
-for i in allLines:
-    # machineCode = Assembler(i)
-    # print(i, machineCode)
-    # output.write(str(machineCode) + '\n')
-    print(i)
+
