@@ -5,7 +5,7 @@ def display32bit(input):
     print('{:032b}'.format(input))
 
 REGISTER = [0 , 0 , 0 , 0 , 0 , 0 , 0 , 0]
-memory = [0, 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0]
+memory = [8454151, 9043971 , 655361 , 16842754 , 16842749 , 29360128 , 25165824 , 5 , -1 , 2]
 pc = 0
 instruction_execute= 0
 # display32bit(REGISTER[0])
