@@ -1,10 +1,15 @@
+def display32bit(input):
+    print('{:032b}'.format(input))
+
+
 REGISTER = [0 , 0 , 0 , 0 , 0 , 0 , 0 , 0]
 
+display32bit(REGISTER[0])
 def op_add(regA , regB , destReg):
-    print()
+    REGISTER[destReg] = REGISTER[regA] + REGISTER[regB]
 
 def op_nand(regA , regB , destReg):
-    print()
+    REGISTER[destReg] = ~(REGISTER[regA] & REGISTER[regB])
 
 def op_lw(regA , regB , offset):
     print()
