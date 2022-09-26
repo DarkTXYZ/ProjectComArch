@@ -1,5 +1,8 @@
 # from assembler import Assembler
 
+from numpy import true_divide
+
+
 input = open('Assembler\input.txt', 'r')
 output = open('Assembler\output.txt', "w")
 readIn = input.readlines()
@@ -9,6 +12,14 @@ specialOP = ["halt", "noop", ".fill"]
 branchOP = ["lw","sw","beq"]
 count = 0
 allLines = []
+
+def numcheck(s):
+    try:
+        num = int(s)
+        isNumber = True
+    except:
+        isNumber = False
+    return isNumber
 
 #Mapping Loop
 for i in readIn:
@@ -30,7 +41,6 @@ for i in readIn:
     line[len(line)-1] = line[len(line)-1].replace("\n", "")
     isLabel = 0
     if(line[0] in labelMapping): isLabel = 1
-    print(line)
     if(line[isLabel] not in operations):
         print("wrong opcode")
         exit(1)
@@ -43,7 +53,7 @@ for i in readIn:
         operation.append(line[isLabel])
         operation.append(line[isLabel+1])
         operation.append(line[isLabel+2])
-        if(line[isLabel+3].isnumeric()) : operation.append(line[isLabel+3])
+        if(numcheck(line[isLabel+3])) : operation.append(line[isLabel+3])
         else:
             if(line[isLabel+3] in labelMapping):
                 if(line[isLabel] == 'beq'): operation.append(str(labelMapping[line[isLabel+3]]-count-1))
@@ -53,8 +63,7 @@ for i in readIn:
                 exit(1)
     elif line[isLabel] == ".fill":
         operation.append(line[isLabel])
-        print(line[isLabel+1])
-        if(line[isLabel+1].isnumeric()): operation.append(line[isLabel+1])
+        if(numcheck(line[isLabel+1])): operation.append(line[isLabel+1])
         else:
             if(line[isLabel+1] in labelMapping): operation.append(str(labelMapping[line[isLabel+1]]))
             else:
@@ -66,7 +75,15 @@ for i in readIn:
     allLines.append(operation)
 
 
+def numcheck(s):
+    try:
+        num = int(s)
+        isNumber = True
+    except:
+        isNumber = False
+    return isNumber
 
+        
 
 
 
