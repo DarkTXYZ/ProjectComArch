@@ -1,47 +1,59 @@
-from dis import Instruction
+from re import L
 
 
 def display32bit(input):
     print('{:032b}'.format(input))
 
-MEMORY = [0 , 0 , 0 , 0 , 0 , 0 , 0 , 0, 0, 0]
 REGISTER = [0 , 0 , 0 , 0 , 0 , 0 , 0 , 0]
+memory = [0, 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0]
+pc = 0
 instruction_execute= 0
-PC = 0
-
 # display32bit(REGISTER[0])
+
+
 def op_add(regA , regB , destReg):
     REGISTER[destReg] = REGISTER[regA] + REGISTER[regB]
+    pc = pc+1
 
 def op_nand(regA , regB , destReg):
     REGISTER[destReg] = ~(REGISTER[regA] & REGISTER[regB])
+    pc = pc+1
 
 def op_lw(regA , regB , offset):
-    print()
+    REGISTER[regB] = memory[(REGISTER[regA] + offset)]
+    pc = pc+1
 
 def op_sw(regA , regB , offset):
-    print()
+    memory[REGISTER[regA] + offset] = REGISTER[regB] 
+    pc = pc+1
 
 def op_beq(regA , regB , offset):
-    print()
+    if( REGISTER[regA] == REGISTER[regB] ):
+        pc = pc+1+offset
 
 def op_jalr(regA , regB):
-    print()
+    if(REGISTER[regA] == REGISTER[regB]):
+        REGISTER[regB] = pc+1
+        pc = pc+1
+    else:
+        REGISTER[regB] = pc+1
+        pc = REGISTER[regA]
 
 def op_halt():
-    print()
+    print("halted")
+    pc = pc+1
 
 def op_noop():
-    print()
+    pass
 
 def printState():
     global instruction_execute
     instruction_execute += 1
     print("@@@" + "\n" + "state:")
-    print("\t PC " + str(PC))
+    print("\t PC " + str(pc))
     print("\t memory:")
     for i in range(10):
-        print("\t\t mem[" + str(i) + "] " + str(MEMORY[i]))
+        print("\t\t mem[" + str(i) + "] " + str(memory[i]))
     print("\t register:")
     for i in range(8):
         print("\t\t register[" + str(i) + "] " + str(REGISTER[i]))
@@ -50,8 +62,6 @@ def printState():
 def machinecodereader(input):
     str_input = '{:032b}'.format(input)
     bin_input = int(str_input)
-    # print(type(bin_input))
-    # print(bin_input)
     if ( str_input[7] == '0' and str_input[8] == '0') :
         rd = str_input[29:32]
         rs = str_input[10:13]
