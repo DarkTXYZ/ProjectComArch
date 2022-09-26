@@ -1,10 +1,10 @@
 def display32bit(input):
     print('{:032b}'.format(input))
 
-
 REGISTER = [0 , 0 , 0 , 0 , 0 , 0 , 0 , 0]
+memory = [0, 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0]
+# display32bit(REGISTER[0])
 
-display32bit(REGISTER[0])
 def op_add(regA , regB , destReg):
     REGISTER[destReg] = REGISTER[regA] + REGISTER[regB]
 
@@ -12,10 +12,10 @@ def op_nand(regA , regB , destReg):
     REGISTER[destReg] = ~(REGISTER[regA] & REGISTER[regB])
 
 def op_lw(regA , regB , offset):
-    print()
+    REGISTER[regB] = memory[(REGISTER[regA] + offset)]
 
 def op_sw(regA , regB , offset):
-    print()
+    memory[REGISTER[regA] + offset] = REGISTER[regB] 
 
 def op_beq(regA , regB , offset):
     print()
@@ -33,8 +33,6 @@ def op_noop():
 def machinecodereader(input):
     str_input = '{:032b}'.format(input)
     bin_input = int(str_input)
-    # print(type(bin_input))
-    # print(bin_input)
     if ( str_input[7] == '0' and str_input[8] == '0') :
         if (str_input[9] == '0') :
             print("add")
