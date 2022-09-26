@@ -50,9 +50,9 @@ def R_type(op, f0, f1, f2):
     bit18_16 = int(f1) << 16
     bit2_0 = int(f2)
 
-    bit = bin(bit24_22) + bin(bit21_19) + bin(bit18_16) + bin(bit2_0)
+    bit = (bit24_22) + (bit21_19) + (bit18_16) + (bit2_0)
 
-    return str(bit)
+    return (bit)
 
 # I-type instructions (lw, sw, beq)
 #                Bits 24-22 opcode
@@ -77,9 +77,9 @@ def I_type(op, f0, f1, f2):
     else:
         bit15_0 = int(f2)
 
-    bit = bin(bit24_22) + bin(bit21_19) + bin(bit18_16) + bin(bit15_0)
+    bit = (bit24_22) + (bit21_19) + (bit18_16) + (bit15_0)
         
-    return str(bit)
+    return (bit)
 
 # J-Type instructions (jalr)
 #                Bits 24-22 opcode
@@ -91,9 +91,9 @@ def J_type(f0, f1):
     bit21_19 = int(f0) << 19
     bit18_16 = int(f1) << 16
 
-    bit = bin(bit24_22) + bin(bit21_19) + bin(bit18_16)
+    bit = (bit24_22) + (bit21_19) + (bit18_16)
 
-    return str(bit)
+    return (bit)
 
 # O-type instructions (halt, noop)
 #                Bits 24-22 opcode
@@ -106,5 +106,5 @@ def O_type(op):
     elif op == 'noop':
         bit = int('111',2) << 22
     
-    return str(bit)
+    return (bit)
     
