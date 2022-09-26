@@ -34,10 +34,15 @@ def machinecodereader(input):
     str_input = '{:032b}'.format(input)
     bin_input = int(str_input)
     if ( str_input[7] == '0' and str_input[8] == '0') :
+        rd = str_input[29:32]
+        rs = str_input[10:13]
+        rt = str_input[13:16]
         if (str_input[9] == '0') :
             print("add")
+            op_add(rs, rt, rd)
         else:
             print("nand")
+            op_nand(rs, rt, rd)
     elif ( str_input[7] == '0' and str_input[8] == '1') :
         if (str_input[9] == '0') :
             print("lw")
@@ -62,4 +67,7 @@ def machinecodereader(input):
 # machinecodereader(16842749)
 # machinecodereader(29360128)
 # machinecodereader(25165824)
+
+
+
 
