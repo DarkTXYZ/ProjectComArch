@@ -42,21 +42,17 @@ def R_type(op, f0, f1, f2):
     bit = 0
     if op == 'add':
         bit24_22 = int('000',2) << 22
-        bit21_19 = int(f0) << 19
-        bit18_16 = int(f1) << 16
-        bit2_0 = int(f2)
-
-        bit = bit21_19 + bit18_16 + bit2_0
 
     elif op == 'nand':
         bit24_22 = int('001',2) << 22
-        bit21_19 = int(f0) << 19
-        bit18_16 = int(f1) << 16
-        bit2_0 = int(f2)
+    
+    bit21_19 = int(f0) << 19
+    bit18_16 = int(f1) << 16
+    bit2_0 = int(f2)
 
-        bit = bit24_22 + bit21_19 + bit18_16 + bit2_0
+    bit = bin(bit24_22) + bin(bit21_19) + bin(bit18_16) + bin(bit2_0)
 
-    return bit
+    return str(bit)
 
 # I-type instructions (lw, sw, beq)
 #                Bits 24-22 opcode
@@ -66,30 +62,24 @@ def R_type(op, f0, f1, f2):
 def I_type(op, f0, f1, f2):
     bit = 0
     if op == 'lw':
-        bit24_22 = 1 << 23
-        bit21_19 = int(f0) << 19
-        bit18_16 = int(f1) << 16
-        bit15_0 = int(f2)
-        
-        bit = bit24_22 + bit21_19 + bit18_16 + bit15_0
+        bit24_22 = int('010',2) << 22
         
     elif op == 'sw':
-        bit24_22 = 3 << 22
-        bit21_19 = int(f0) << 19
-        bit18_16 = int(f1) << 16
-        bit15_0 = int(f2)
-        
-        bit = bit24_22 + bit21_19 + bit18_16 + bit15_0
+        bit24_22 = int('011',2) << 22
         
     elif op == 'beq':
-        bit24_22 = 1 << 24
-        bit21_19 = int(f0) << 19
-        bit18_16 = int(f1) << 16
+        bit24_22 = int('100',2) << 22
+
+    bit21_19 = int(f0) << 19
+    bit18_16 = int(f1) << 16
+    if int(f2) < 0:
+        bit15_0 = int(f2) & 0b1111111111111111  # 2's complement
+    else:
         bit15_0 = int(f2)
 
-        bit = bit24_22 + bit21_19 + bit18_16 + bit15_0
+    bit = bin(bit24_22) + bin(bit21_19) + bin(bit18_16) + bin(bit15_0)
         
-    return bit
+    return str(bit)
 
 # J-Type instructions (jalr)
 #                Bits 24-22 opcode
@@ -101,9 +91,9 @@ def J_type(f0, f1):
     bit21_19 = int(f0) << 19
     bit18_16 = int(f1) << 16
 
-    bit = bit24_22 + bit21_19 + bit18_16
+    bit = bin(bit24_22) + bin(bit21_19) + bin(bit18_16)
 
-    return bit
+    return str(bit)
 
 # O-type instructions (halt, noop)
 #                Bits 24-22 opcode
@@ -111,10 +101,10 @@ def J_type(f0, f1):
 def O_type(op):
     bit = 0
     if op == 'halt':
-        bit = 3 << 23
+        bit = int('110',2) << 22
 
     elif op == 'noop':
-        bit = 7 << 22
+        bit = int('111',2) << 22
     
-    return bit
+    return str(bit)
     
