@@ -1,10 +1,15 @@
+from dis import Instruction
+
+
 def display32bit(input):
     print('{:032b}'.format(input))
 
-
+MEMORY = [0 , 0 , 0 , 0 , 0 , 0 , 0 , 0, 0, 0]
 REGISTER = [0 , 0 , 0 , 0 , 0 , 0 , 0 , 0]
+instruction_execute= 0
+PC = 0
 
-display32bit(REGISTER[0])
+# display32bit(REGISTER[0])
 def op_add(regA , regB , destReg):
     REGISTER[destReg] = REGISTER[regA] + REGISTER[regB]
 
@@ -29,6 +34,18 @@ def op_halt():
 def op_noop():
     print()
 
+def printState():
+    global instruction_execute
+    instruction_execute += 1
+    print("@@@" + "\n" + "state:")
+    print("\t PC " + str(PC))
+    print("\t memory:")
+    for i in range(10):
+        print("\t\t mem[" + str(i) + "] " + str(MEMORY[i]))
+    print("\t register:")
+    for i in range(8):
+        print("\t\t register[" + str(i) + "] " + str(REGISTER[i]))
+    print("end state")
 
 def machinecodereader(input):
     str_input = '{:032b}'.format(input)
@@ -69,6 +86,7 @@ def machinecodereader(input):
 # machinecodereader(16842749)
 # machinecodereader(29360128)
 # machinecodereader(25165824)
+printState()
 
 
 
