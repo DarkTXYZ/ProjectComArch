@@ -79,6 +79,13 @@ def printState():
         print("\t\t register[" + str(i) + "] " + str(REGISTER[i]))
     print("end state")
 
+def convertToDec(B_str, len):
+    total = 0
+    for i in range(len):
+        total +=  int(B_str[i])*(2**(len-1))
+        len -= 1
+    return total
+
 def machinecodereader(input):
     REGISTER[0] = 0
     str_input = '{:032b}'.format(input)
@@ -104,6 +111,11 @@ def machinecodereader(input):
             # print(int_rs)
             # print("rt" ,end='')
             # print(int_rt)
+            # test = convertToDec(rd, len(rd))
+            # test1 = convertToDec(rs, len(rs))
+            # test2 = convertToDec(rt, len(rt))
+            # print(rd, rs, rt)
+            # print(test2)
             op_add(int_rs, int_rt, int_rd)
         else:
             # print("nand")
