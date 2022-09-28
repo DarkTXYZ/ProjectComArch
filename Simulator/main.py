@@ -1,4 +1,5 @@
 # display32bit(REGISTER[0])
+
 #! open in your file directory
 file = open("C:\\Users\Acer\OneDrive - Chiang Mai University\Desktop\Com Archietecture\Project(PHP 8.4)\ProjectComArch\Simulator\input.txt", "r")
 file_read = file.read()
@@ -6,17 +7,23 @@ file_read = file.read()
 #! variable
 REGISTER = [0 , 0 , 0 , 0 , 0 , 0 , 0 , 0]
 memory = []
-# memory = [8454151, 9043971 , 655361 , 16842754 , 16842749 , 29360128 , 25165824 , 5 , -1 , 2]
 pc = 0
 instruction_execute= 0
 test_mem = []
 
+#! read from .txt
 def inputFromAssembler():
     global memory
     input_split = file_read.split("\n")
     for i in range(len(input_split)):
         memory.append(int(input_split[i]))
 
+#! 2’s complement
+def two2dec(s):
+  if s[0] == '1':
+    return -1 * (int(''.join('1' if x == '0' else '0' for x in s), 2) + 1)
+  else:
+    return int(s, 2)
 
 def display32bit(input):
     print('{:032b}'.format(input))
@@ -27,6 +34,7 @@ def op_add(regA , regB , destReg):
     global pc
     printState()
     # pc = pc+1
+    return False
 
 def op_nand(regA , regB , destReg):
     global REGISTER
@@ -34,6 +42,7 @@ def op_nand(regA , regB , destReg):
     global pc
     printState()
     # pc = pc+1
+    return False
     
 
 def op_lw(regA , regB , offset):
@@ -42,6 +51,7 @@ def op_lw(regA , regB , offset):
     global pc
     printState()
     # pc = pc+1
+    return False
 
 def op_sw(regA , regB , offset):
     global REGISTER
@@ -49,12 +59,15 @@ def op_sw(regA , regB , offset):
     global pc
     printState()
     # pc = pc+1
+    return False
 
 def op_beq(regA , regB , offset):
     global REGISTER
     global pc
     if( REGISTER[regA] == REGISTER[regB] ):
         pc = pc+1+offset
+    printState()
+    return False
 
 def op_jalr(regA , regB):
     global REGISTER
@@ -67,17 +80,20 @@ def op_jalr(regA , regB):
         REGISTER[regB] = pc+1
         pc = REGISTER[regA]
         # printState()
+    return False
 
 def op_halt():
     global pc
     print("halted")
     pc = pc+1
     # printState()
+    return True
 
 def op_noop():
     global pc
     pc = pc+1
     # printState()
+    return False
 
 def printState():
     global instruction_execute, pc
@@ -118,22 +134,20 @@ def machinecodereader(input):
         int_rs = int(str_rs , 2)
         int_rd = int(str_rd , 2)
 
-        print(int_rs, int_rd, int_off)
         if (str_input[9] == '0') :
             op_lw(int_rs, int_rd, int_off)
         else:
             print("sw")
     elif ( str_input[7] == '1' and str_input[8] == '0') :
         if (str_input[9] == '0') :
-            print("beq")
             str_off = str_input[16:32]
             str_rs = str_input[10:13]
             str_rd = str_input[13:16]
-            int_off = int(str_off , 2)
+            int_off = two2dec(str_off)
             int_rs = int(str_rs , 2)
             int_rd = int(str_rd , 2)
+
             op_beq(int_rs, int_rd, int_off)
-            print(pc)
         else:
             print("jalr")
     elif ( str_input[7] == '1' and str_input[8] == '1') :
@@ -148,6 +162,16 @@ def machinecodereader(input):
 def main():
     inputFromAssembler()
     printState()
-    for i in range(3):
-        machinecodereader(int(memory[i]))
+    # loop()
+    for i in range(5):
+            machinecodereader(int(memory[i]))
+    # machinecodereader(16842754)
+
+    
+def loop(check):
+    if check == True:
+        return 0
+    else:
+        for i in range(3):
+            machinecodereader(int(memory[i]))
 main()
