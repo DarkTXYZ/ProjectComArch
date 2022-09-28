@@ -7,11 +7,13 @@ input = open('Assembler\input.txt', 'r')
 output = open('Assembler\output.txt', "w")
 readIn = input.readlines()
 labelMapping = {}
-operations = ["add", "nand", "lw", "sw", "beq", "jalr", "halt", "noop",".fill"]
-specialOP = ["halt", "noop", ".fill"]
-branchOP = ["lw","sw","beq"]
+operations = ["add", "nand", "lw", "sw",
+              "beq", "jalr", "halt", "noop", ".fill"]
+specialOP = ["halt", "noop", ".fill", "jalr"]
+branchOP = ["lw", "sw", "beq"]
 count = 0
 allLines = []
+
 
 def numcheck(s):
     try:
@@ -21,68 +23,85 @@ def numcheck(s):
         isNumber = False
     return isNumber
 
-#Mapping Loop
+
+# Mapping Loop
 for i in readIn:
-    line = i.split(" ")
+    line = i.split()
     line[len(line)-1] = line[len(line)-1].replace("\n", "")
-    if (line[0] not in operations and line[0] not in labelMapping):
-        if(len(line)==1):
-            print("wrong opcode")
-            exit(1)
-        labelMapping.update({line[0]: count})
+    if (line[0] not in operations):
+        if(line[0] not in labelMapping):
+            if(len(line) == 1):
+                print("wrong opcode: probably input only a label no op")
+                exit(1)
+            else: labelMapping.update({line[0]: count})
+        else:
+            print("label already define"+line[0])
     count += 1
 print(labelMapping)
 count = 0
 
-#Input Loop
+# Input Loop
 for i in readIn:
-    operation=[]
-    line = i.split(" ")
+    operation = []
+    line = i.split()
     line[len(line)-1] = line[len(line)-1].replace("\n", "")
     isLabel = 0
-    if(line[0] in labelMapping): isLabel = 1
+    if(line[0] in labelMapping):
+        isLabel = 1
     if(line[isLabel] not in operations):
         print("wrong opcode")
         exit(1)
     if(line[isLabel] in branchOP and line[isLabel+3].isnumeric()):
         lowest = -32768
-        if(int(line[3+isLabel]) < lowest  or int(line[3+isLabel])>32767):
+        if(int(line[3+isLabel]) < lowest or int(line[3+isLabel]) > 32767):
             print("too greedy")
-            exit(1) 
+            exit(1)
     if(line[isLabel] not in specialOP):
         operation.append(line[isLabel])
         operation.append(line[isLabel+1])
         operation.append(line[isLabel+2])
-        if(numcheck(line[isLabel+3])) : operation.append(line[isLabel+3])
+        if(numcheck(line[isLabel+3])):
+            operation.append(line[isLabel+3])
         else:
             if(line[isLabel+3] in labelMapping):
-                if(line[isLabel] == 'beq'): operation.append(str(labelMapping[line[isLabel+3]]-count-1))
-                else:operation.append(str(labelMapping[line[isLabel+3]]))
+                if(line[isLabel] == 'beq'):
+                    operation.append(
+                        str(labelMapping[line[isLabel+3]]-count-1))
+                else:
+                    operation.append(str(labelMapping[line[isLabel+3]]))
             else:
-                print("undefined label")
+                print("undefined label: normal")
                 exit(1)
     elif line[isLabel] == ".fill":
         operation.append(line[isLabel])
-        if(numcheck(line[isLabel+1])): operation.append(line[isLabel+1])
+        if(numcheck(line[isLabel+1])):
+            operation.append(line[isLabel+1])
         else:
-            if(line[isLabel+1] in labelMapping): operation.append(str(labelMapping[line[isLabel+1]]))
+            if(line[isLabel+1] in labelMapping):
+                operation.append(str(labelMapping[line[isLabel+1]]))
             else:
-                print("undefined label")
+                print("undefined label: .fill")
+                exit(1)
+    elif line[isLabel] == "jalr":
+        operation.append(line[isLabel])
+        operation.append(line[isLabel+1])
+        if(numcheck(line[isLabel+2])):
+            operation.append(line[isLabel+2])
+        else:
+            if(line[isLabel+2] in labelMapping):
+                operation.append(str(labelMapping[line[isLabel+2]]))
+            else:
+                print("undefined label: jalr")
                 exit(1)
     elif line[isLabel] == "halt" or line[isLabel] == "noop":
         operation.append(line[isLabel])
-    count+=1
+    count += 1
     allLines.append(operation)
 
 for i in allLines:
     machineCode = Assembler(i)
-    print(i, machineCode)
+    print(i, machineCode , bin(machineCode))
     output.write(str(machineCode) + '\n')
-
-
-
-
-
 
 
 # for i in readIn:
@@ -95,7 +114,7 @@ for i in allLines:
 #     if (line[isLabel] not in specialOP and line[isLabel] not in operations):
 #         print("wrong input")
 #         exit(1)
-  
+
 #     if (line[isLabel] not in specialOP):
 #         for j in range(4):
 #             if(j==3 and not line[3+isLabel].isnumeric()):
@@ -104,7 +123,7 @@ for i in allLines:
 #                         line[3+isLabel] = str(labelMapping[line[3+isLabel]]-count-1)
 #                     else:
 #                         line[3+isLabel] = str(labelMapping[line[3+isLabel]])
-#                 else: 
+#                 else:
 #                     print("wrong label")
 #                     exit(1)
 #             operation.append(line[j+isLabel])
@@ -122,9 +141,7 @@ for i in allLines:
 #         lowest = -32768
 #         if(int(line[3+isLabel]) < lowest  or int(line[3+isLabel])>32767):
 #             print("too greedy")
-#             exit(1) 
+#             exit(1)
 #     allLines.append(operation)
 #     count += 1
-#Correction Loop
-
-
+# Correction Loop

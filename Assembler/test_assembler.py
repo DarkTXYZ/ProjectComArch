@@ -3,17 +3,10 @@ from assembler import Assembler
 a = Assembler(['.fill' , '32'])
 print(bin(a))
 
-# add 1 2 1
-# 0000000 000 001 010 0000000000000 001
-# nand 1 2 1
-# 0000000 001 001 010 0000000000000 001
-# nand 5 6 7
-# 0000000 001 101 110 0000000000000 111
-# .fill 5
-# 0000000 000 000 000 0000000000000 101
-# beq 0 0 2
-# 0000000 100 000 000 1111111111111 101
 
-
-
-# beq relative address
+# undefine label
+# same label
+# offsetField out of bound (-32768 to 32767)
+# undefine opcode
+# negative value
+# beq
