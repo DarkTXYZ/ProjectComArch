@@ -28,11 +28,14 @@ def numcheck(s):
 for i in readIn:
     line = i.split()
     line[len(line)-1] = line[len(line)-1].replace("\n", "")
-    if (line[0] not in operations and line[0] not in labelMapping):
-        if(len(line) == 1):
-            print("wrong opcode")
-            exit(1)
-        labelMapping.update({line[0]: count})
+    if (line[0] not in operations):
+        if(line[0] not in labelMapping):
+            if(len(line) == 1):
+                print("wrong opcode: probably input only a label no op")
+                exit(1)
+            else: labelMapping.update({line[0]: count})
+        else:
+            print("label already define"+line[0])
     count += 1
 print(labelMapping)
 count = 0
@@ -85,7 +88,7 @@ for i in readIn:
         if(numcheck(line[isLabel+2])):
             operation.append(line[isLabel+2])
         else:
-            if(line[isLabel+1] in labelMapping):
+            if(line[isLabel+2] in labelMapping):
                 operation.append(str(labelMapping[line[isLabel+2]]))
             else:
                 print("undefined label: jalr")
