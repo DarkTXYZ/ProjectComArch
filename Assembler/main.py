@@ -85,7 +85,7 @@ for i in readIn:
         if(numcheck(line[isLabel+2])):
             operation.append(line[isLabel+2])
         else:
-            if(line[isLabel+1] in labelMapping):
+            if(line[isLabel+2] in labelMapping):
                 operation.append(str(labelMapping[line[isLabel+2]]))
             else:
                 print("undefined label: jalr")
