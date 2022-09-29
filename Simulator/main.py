@@ -1,7 +1,7 @@
 # display32bit(REGISTER[0])
 
 #! open in your file directory
-file = open("C:\\Users\Acer\OneDrive - Chiang Mai University\Desktop\Com Archietecture\Project(PHP 8.4)\ProjectComArch\Simulator\input.txt", "r")
+file = open("Simulator\input.txt", "r")
 file_read = file.read()
 
 #! variable
