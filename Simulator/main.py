@@ -135,9 +135,14 @@ def machinecodereader(input):
         int_rd = int(str_rd , 2)
 
         if (str_input[9] == '0') :
+<<<<<<< Updated upstream
+=======
+            # print("lw")
+>>>>>>> Stashed changes
             op_lw(int_rs, int_rd, int_off)
         else:
-            print("sw")
+            # print("sw")
+            op_sw(int_rs, int_rd, int_off)
     elif ( str_input[7] == '1' and str_input[8] == '0') :
         if (str_input[9] == '0') :
             str_off = str_input[16:32]
