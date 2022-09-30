@@ -1,23 +1,23 @@
-lw 0 1 result
+lw 0 1 result 
 lw 0 2 mcand
 lw 0 3 mplier
 lw 0 4 bitExpo
 lw 0 5 cntLoop
 lw 0 6 neg1
-beq 2 0 skipToHalt
-beq 3 0 skipToHalt
-for1 nand 3 4 7
-nand 7 7 7
-beq 7 3 added
-rs add 4 4 4
-add 2 2 2
-beq 0 0 endfor1
-added add 1 2 1
-beq 0 0 rs
-endfor1 add 5 6 5
-beq 5 0 skipToHalt
-beq 0 0 for1
-skipToHalt halt
+beq 2 0 skipToHalt      check if mcand is 0
+beq 3 0 skipToHalt      check if mplier is 0
+for nand 3 4 7          check each bit of mplier is 1 or not
+nand 7 7 7              
+beq 7 3 added           if bit == 1 we add mcand to result
+rs add 4 4 4            bitExpo = bitExpo * 2
+add 2 2 2               mcand = mcand * 2
+beq 0 0 endfor1         go next loop
+added add 1 2 1         add mcand to result
+beq 0 0 rs              go back to rs
+endfor add 5 6 5        cntLoop = cntLoop - 1
+beq 5 0 skipToHalt      if cntLoop = 0 exit loop
+beq 0 0 for1            else continue loop
+skipToHalt halt         ends program
 result .fill 0
 mcand .fill 2
 mplier .fill 8
