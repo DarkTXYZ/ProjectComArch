@@ -1,0 +1,36 @@
+# add , nand , lw , sw , beq , jalr , halt , noop
+
+addi x20 , x0 , 1253 # mcand -> .fill
+addi x21 , x0 , 1043 # mplier -> .fill
+addi x22 , x0 , 0    # result -> .fill
+addi x23 , x0 , 1    # cnt -> .fill
+addi x25 , x0 , 16   # cnt loop
+
+beq x20 , x0 , halt
+
+# check for each bit in mplier
+
+for1:
+  # check multiplier bit
+  # and gate
+  # nand x24, x21 , x23
+  # nand x24 , x24 , x24
+  and x24 , x21 , x23
+  beq x24 , x23 , added
+rs:  
+  add x23 , x23 , x23 
+  add x20 , x20 , x20
+  beq x0 , x0 , endfor1
+added:
+  add x22 , x20 , x22
+  beq x0 , x0 , rs
+
+
+endfor1:
+  addi x25 , x25 , -1
+  beq x25 , x0 , 8
+  beq x0 , x0 , for1
+
+halt:
+  add x0 , x0 , x0
+
