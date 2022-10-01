@@ -114,7 +114,7 @@ def machinecodereader(input):
     str_input = '{:032b}'.format(input)
     bin_input = int(str_input)
     new_strList = []
-    # print("str_input "+str_input )
+    print("str_input "+str_input )
     if ( str_input[7] == '0' and str_input[8] == '0') :
         str_rd = str_input[29:32]
         str_rs = str_input[10:13]
@@ -153,10 +153,10 @@ def machinecodereader(input):
             print("jalr")
     elif ( str_input[7] == '1' and str_input[8] == '1') :
         if (str_input[9] == '0') :
-            print("halt")
+            # print("halt")
             op_halt()
         else:
-            print("noop")
+            # print("noop")
             op_noop()
     else : pass
 
@@ -166,7 +166,7 @@ def main():
     inputFromAssembler()
     printState()
     # loop()
-    for i in range(5):
+    for i in range(len(memory)):
             machinecodereader(int(memory[i]))
     # machinecodereader(16842754)
 
