@@ -1,7 +1,10 @@
 # display32bit(REGISTER[0])
 
 #! open in your file directory
-file = open("Simulator\input.txt", "r")
+from asyncio.windows_events import NULL
+
+
+file = open("C:\\Users\Acer\OneDrive - Chiang Mai University\Desktop\Com Archietecture\Project(PHP 8.4)\ProjectComArch\Simulator\input.txt", "r")
 file_read = file.read()
 
 #! variable
@@ -9,7 +12,7 @@ REGISTER = [0 , 0 , 0 , 0 , 0 , 0 , 0 , 0]
 memory = []
 pc = 0
 instruction_execute= 0
-test_mem = []
+    
 
 #! read from .txt
 def inputFromAssembler():
@@ -29,45 +32,58 @@ def display32bit(input):
     print('{:032b}'.format(input))
 
 def op_add(regA , regB , destReg):
+    global pc
+    pc += 1
     global REGISTER
     REGISTER[destReg] = REGISTER[regA] + REGISTER[regB]
-    global pc
     printState()
-    # pc = pc+1
-    return False
+    return True
 
 def op_nand(regA , regB , destReg):
+    global pc
+    pc += 1
     global REGISTER
     REGISTER[destReg] = ~(REGISTER[regA] & REGISTER[regB])
-    global pc
     printState()
-    # pc = pc+1
-    return False
+    return True
     
-
 def op_lw(regA , regB , offset):
+    global pc
+    pc += 1
     global REGISTER
     REGISTER[regB] = memory[(REGISTER[regA] + offset)]
-    global pc
     printState()
-    # pc = pc+1
-    return False
+    return True
 
 def op_sw(regA , regB , offset):
+    global pc
+    pc += 1
     global REGISTER
     memory[REGISTER[regA] + offset] = REGISTER[regB] 
-    global pc
     printState()
-    # pc = pc+1
-    return False
+    return True
 
 def op_beq(regA , regB , offset):
     global REGISTER
     global pc
+    n_loop = pc
     if( REGISTER[regA] == REGISTER[regB] ):
         pc = pc+1+offset
-    printState()
-    return False
+        printState()
+        if offset < 0:
+            loop(pc, n_loop+1)
+            return True
+        else:
+            return False
+    else: 
+        pc += 1
+        printState()
+        return True
+
+def loop(n, m):
+    for i in range(n,m):
+        check = machinecodereader(int(memory[i]))
+        if check == False: break
 
 def op_jalr(regA , regB):
     global REGISTER
@@ -80,20 +96,15 @@ def op_jalr(regA , regB):
         REGISTER[regB] = pc+1
         pc = REGISTER[regA]
         # printState()
-    return False
 
 def op_halt():
     global pc
     print("halted")
     pc = pc+1
-    # printState()
-    return True
 
 def op_noop():
     global pc
     pc = pc+1
-    # printState()
-    return False
 
 def printState():
     global instruction_execute, pc
@@ -106,15 +117,16 @@ def printState():
     print("\t register:")
     for i in range(8):
         print("\t\t register[" + str(i) + "] " + str(REGISTER[i]))
-    print("end state")
-    pc += 1
+    print("end state\n")
+    # pc += 1
 
 def machinecodereader(input):
     REGISTER[0] = 0
     str_input = '{:032b}'.format(input)
     bin_input = int(str_input)
     new_strList = []
-    print("str_input "+str_input )
+    check_loop = True
+    # print(check_loop)
     if ( str_input[7] == '0' and str_input[8] == '0') :
         str_rd = str_input[29:32]
         str_rs = str_input[10:13]
@@ -123,9 +135,9 @@ def machinecodereader(input):
         int_rs = int(str_rs , 2)
         int_rt = int(str_rt , 2)
         if (str_input[9] == '0') :
-            op_add(int_rs, int_rt, int_rd)
+            check_loop = op_add(int_rs, int_rt, int_rd)
         else:
-            op_nand(int_rs, int_rt, int_rd)
+            check_loop = op_nand(int_rs, int_rt, int_rd)
     elif ( str_input[7] == '0' and str_input[8] == '1') :
         str_off = str_input[16:32]
         str_rs = str_input[10:13]
@@ -135,9 +147,8 @@ def machinecodereader(input):
         int_rd = int(str_rd , 2)
 
         if (str_input[9] == '0') :
-            op_lw(int_rs, int_rd, int_off)
+            check_loop = op_lw(int_rs, int_rd, int_off)
         else:
-            # print("sw")
             op_sw(int_rs, int_rd, int_off)
     elif ( str_input[7] == '1' and str_input[8] == '0') :
         if (str_input[9] == '0') :
@@ -148,18 +159,18 @@ def machinecodereader(input):
             int_rs = int(str_rs , 2)
             int_rd = int(str_rd , 2)
 
-            op_beq(int_rs, int_rd, int_off)
+            check_loop = op_beq(int_rs, int_rd, int_off)
         else:
             print("jalr")
     elif ( str_input[7] == '1' and str_input[8] == '1') :
         if (str_input[9] == '0') :
-            # print("halt")
+             # print("halt")
             op_halt()
         else:
             # print("noop")
             op_noop()
     else : pass
-
+    return check_loop
 
 
 def main():
@@ -167,14 +178,7 @@ def main():
     printState()
     # loop()
     for i in range(len(memory)):
-            machinecodereader(int(memory[i]))
-    # machinecodereader(16842754)
+           machinecodereader(int(memory[i]))
 
-    
-def loop(check):
-    if check == True:
-        return 0
-    else:
-        for i in range(3):
-            machinecodereader(int(memory[i]))
+
 main()
