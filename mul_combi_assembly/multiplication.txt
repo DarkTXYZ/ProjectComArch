@@ -11,12 +11,12 @@ nand 7 7 7
 beq 7 3 added           if bit == 1 we add mcand to result
 rs add 4 4 4            bitExpo = bitExpo * 2
 add 2 2 2               mcand = mcand * 2
-beq 0 0 endfor1         go next loop
+beq 0 0 endfor         go next loop
 added add 1 2 1         add mcand to result
 beq 0 0 rs              go back to rs
 endfor add 5 6 5        cntLoop = cntLoop - 1
 beq 5 0 skipToHalt      if cntLoop = 0 exit loop
-beq 0 0 for1            else continue loop
+beq 0 0 for            else continue loop
 skipToHalt halt         ends program
 result .fill 0
 mcand .fill 2
