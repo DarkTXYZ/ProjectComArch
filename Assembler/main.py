@@ -1,3 +1,4 @@
+from cProfile import label
 from assembler import Assembler
 
 from numpy import true_divide
@@ -24,7 +25,8 @@ def numcheck(s):
     return isNumber
 
 
-# Mapping Loop
+# Mapping Loop 
+# loop whole input to extract label and it's memory 
 for i in readIn:
     line = i.split()
     line[len(line)-1] = line[len(line)-1].replace("\n", "")
@@ -41,21 +43,31 @@ print(labelMapping)
 count = 0
 
 # Input Loop
+# loop whole input to make a list of string of opcode and field of each input line
 for i in readIn:
     operation = []
     line = i.split()
     line[len(line)-1] = line[len(line)-1].replace("\n", "")
     isLabel = 0
+    #checking if this line has label or not if yes skip the [0]
+        #                   line[0]     line[1]
+        #with label         label       opcode
+        #without label      opcode      field1
     if(line[0] in labelMapping):
         isLabel = 1
+
+    #check if opcode is known in requirement
     if(line[isLabel] not in operations):
         print("wrong opcode")
         exit(1)
+    #check offset field 
     if(line[isLabel] in branchOP and line[isLabel+3].isnumeric()):
         lowest = -32768
         if(int(line[3+isLabel]) < lowest or int(line[3+isLabel]) > 32767):
             print("too greedy")
             exit(1)
+    #spliting sessions
+    #3 field operation ex add r1 r2 r3
     if(line[isLabel] not in specialOP):
         operation.append(line[isLabel])
         operation.append(line[isLabel+1])
@@ -63,17 +75,21 @@ for i in readIn:
         if(numcheck(line[isLabel+3])):
             operation.append(line[isLabel+3])
         else:
+            #check the last field if it's label replace with the mapped value
             if(line[isLabel+3] in labelMapping):
+                #branching have deferent value replacement (relatively)
                 if(line[isLabel] == 'beq'):
                     operation.append(
                         str(labelMapping[line[isLabel+3]]-count-1))
                 else:
                     operation.append(str(labelMapping[line[isLabel+3]]))
             else:
-                print("undefined label: normal")
+                print("undefined label: 3field operation")
                 exit(1)
+    #.fill           
     elif line[isLabel] == ".fill":
         operation.append(line[isLabel])
+        #check for last field label
         if(numcheck(line[isLabel+1])):
             operation.append(line[isLabel+1])
         else:
@@ -82,9 +98,11 @@ for i in readIn:
             else:
                 print("undefined label: .fill")
                 exit(1)
+    #2 field operation
     elif line[isLabel] == "jalr":
         operation.append(line[isLabel])
         operation.append(line[isLabel+1])
+        #check label
         if(numcheck(line[isLabel+2])):
             operation.append(line[isLabel+2])
         else:
@@ -93,6 +111,7 @@ for i in readIn:
             else:
                 print("undefined label: jalr")
                 exit(1)
+    #no field operation
     elif line[isLabel] == "halt" or line[isLabel] == "noop":
         operation.append(line[isLabel])
     count += 1
@@ -104,44 +123,4 @@ for i in allLines:
     output.write(str(machineCode) + '\n')
 
 
-# for i in readIn:
-#     operation = []
-#     line = i.split(" ")
-#     line[len(line)-1] = line[len(line)-1].replace("\n", "")
-#     isLabel = 0
-#     if (line[0] not in operations) and i != "noop\n":
-#         isLabel = 1
-#     if (line[isLabel] not in specialOP and line[isLabel] not in operations):
-#         print("wrong input")
-#         exit(1)
 
-#     if (line[isLabel] not in specialOP):
-#         for j in range(4):
-#             if(j==3 and not line[3+isLabel].isnumeric()):
-#                 if (line[3+isLabel] in labelMapping):
-#                     if (line[isLabel] == 'beq'):
-#                         line[3+isLabel] = str(labelMapping[line[3+isLabel]]-count-1)
-#                     else:
-#                         line[3+isLabel] = str(labelMapping[line[3+isLabel]])
-#                 else:
-#                     print("wrong label")
-#                     exit(1)
-#             operation.append(line[j+isLabel])
-#     elif line[isLabel] == ".fill":
-#         operation.append(line[isLabel])
-#         if (line[isLabel+1] in labelMapping):
-#             line[isLabel+1] = str(labelMapping[line[isLabel+1]])
-#         if(line[isLabel+1] not in labelMapping and not line[isLabel+1].isnumeric()):
-#             print("undefine label")
-#             exit(1)
-#         operation.append(line[isLabel+1])
-#     else:
-#         operation.append(line[isLabel])
-#     if(line[isLabel] in branchOP):
-#         lowest = -32768
-#         if(int(line[3+isLabel]) < lowest  or int(line[3+isLabel])>32767):
-#             print("too greedy")
-#             exit(1)
-#     allLines.append(operation)
-#     count += 1
-# Correction Loop
