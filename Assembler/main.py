@@ -1,8 +1,4 @@
-from cProfile import label
 from assembler import Assembler
-
-from numpy import true_divide
-
 
 input = open('Assembler\input.txt', 'r')
 output = open('Assembler\output.txt', "w")
@@ -25,8 +21,8 @@ def numcheck(s):
     return isNumber
 
 
-# Mapping Loop 
-# loop whole input to extract label and it's memory 
+# Mapping Loop
+# loop whole input to extract label and it's memory
 for i in readIn:
     line = i.split()
     line[len(line)-1] = line[len(line)-1].replace("\n", "")
@@ -35,7 +31,8 @@ for i in readIn:
             if(len(line) == 1):
                 print("wrong opcode: probably input only a label no op")
                 exit(1)
-            else: labelMapping.update({line[0]: count})
+            else:
+                labelMapping.update({line[0]: count})
         else:
             print("label already define"+line[0])
     count += 1
@@ -49,25 +46,25 @@ for i in readIn:
     line = i.split()
     line[len(line)-1] = line[len(line)-1].replace("\n", "")
     isLabel = 0
-    #checking if this line has label or not if yes skip the [0]
-        #                   line[0]     line[1]
-        #with label         label       opcode
-        #without label      opcode      field1
+    # checking if this line has label or not if yes skip the [0]
+    #                   line[0]     line[1]
+    # with label         label       opcode
+    # without label      opcode      field1
     if(line[0] in labelMapping):
         isLabel = 1
 
-    #check if opcode is known in requirement
+    # check if opcode is known in requirement
     if(line[isLabel] not in operations):
         print("wrong opcode")
         exit(1)
-    #check offset field 
+    # check offset field
     if(line[isLabel] in branchOP and line[isLabel+3].isnumeric()):
         lowest = -32768
         if(int(line[3+isLabel]) < lowest or int(line[3+isLabel]) > 32767):
             print("too greedy")
             exit(1)
-    #spliting sessions
-    #3 field operation ex add r1 r2 r3
+    # spliting sessions
+    # 3 field operation ex add r1 r2 r3
     if(line[isLabel] not in specialOP):
         operation.append(line[isLabel])
         operation.append(line[isLabel+1])
@@ -75,9 +72,9 @@ for i in readIn:
         if(numcheck(line[isLabel+3])):
             operation.append(line[isLabel+3])
         else:
-            #check the last field if it's label replace with the mapped value
+            # check the last field if it's label replace with the mapped value
             if(line[isLabel+3] in labelMapping):
-                #branching have deferent value replacement (relatively)
+                # branching have deferent value replacement (relatively)
                 if(line[isLabel] == 'beq'):
                     operation.append(
                         str(labelMapping[line[isLabel+3]]-count-1))
@@ -86,10 +83,10 @@ for i in readIn:
             else:
                 print("undefined label: 3field operation")
                 exit(1)
-    #.fill           
+    # .fill
     elif line[isLabel] == ".fill":
         operation.append(line[isLabel])
-        #check for last field label
+        # check for last field label
         if(numcheck(line[isLabel+1])):
             operation.append(line[isLabel+1])
         else:
@@ -98,11 +95,11 @@ for i in readIn:
             else:
                 print("undefined label: .fill")
                 exit(1)
-    #2 field operation
+    # 2 field operation
     elif line[isLabel] == "jalr":
         operation.append(line[isLabel])
         operation.append(line[isLabel+1])
-        #check label
+        # check label
         if(numcheck(line[isLabel+2])):
             operation.append(line[isLabel+2])
         else:
@@ -111,7 +108,7 @@ for i in readIn:
             else:
                 print("undefined label: jalr")
                 exit(1)
-    #no field operation
+    # no field operation
     elif line[isLabel] == "halt" or line[isLabel] == "noop":
         operation.append(line[isLabel])
     count += 1
@@ -119,8 +116,5 @@ for i in readIn:
 
 for i in allLines:
     machineCode = Assembler(i)
-    print(i, machineCode , bin(machineCode))
+    print(i, machineCode, bin(machineCode))
     output.write(str(machineCode) + '\n')
-
-
-

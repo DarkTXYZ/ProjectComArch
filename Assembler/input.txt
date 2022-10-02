@@ -1,26 +1,76 @@
-lw 0 1 result 
-lw 0 2 mcand
-lw 0 3 mplier
-lw 0 4 bitExpo
-lw 0 5 cntLoop
+lw 0 1 n
+lw 0 2 r
+lw 0 3 result
+lw 0 6 comAdr
+lw 0 5 stackPointer
+jalr 6 7    call combination function
+halt
+combi sw 5 7 stack  store return address
+lw 0 6 pos1         store to stack (n,r)
+add 5 6 5
+sw 5 1 stack
+add 5 6 5
+sw 5 2 stack
+add 5 6 5
+sw 5 4 stack
+add 5 6 5
+beq 2 0 basecase
+beq 1 2 basecase
 lw 0 6 neg1
-beq 2 0 skipToHalt      check if mcand is 0
-beq 3 0 skipToHalt      check if mplier is 0
-for nand 3 4 7          check each bit of mplier is 1 or not
-nand 7 7 7              
-beq 7 4 added           if bit == 1 we add mcand to result
-rs add 4 4 4            bitExpo = bitExpo * 2
-add 2 2 2               mcand = mcand * 2
-beq 0 0 endfor         go next loop
-added add 1 2 1         add mcand to result
-beq 0 0 rs              go back to rs
-endfor add 5 6 5        cntLoop = cntLoop - 1
-beq 5 0 skipToHalt      if cntLoop = 0 exit loop
-beq 0 0 for            else continue loop
-skipToHalt halt         ends program
+add 1 6 1           n = n - 1
+lw 0 6 comAdr
+jalr 6 7            call combi(n-1,r)
+add 3 0 4           $4 = combi(n-1,r)
+lw 0 6 neg1
+add 2 6 2           r = r - 1
+lw 0 6 comAdr
+jalr 6 7            call combi(n-1,r-1)
+add 3 4 4           $4 = combi(n-1,r-1) + combi(n-1,r)
+add 4 0 3           result = $4
+beq 0 0 return
+basecase lw 0 3 pos1
+return lw 0 6 neg1         load from stack (n,r)
+add 5 6 5
+lw 5 4 stack
+add 5 6 5
+lw 5 2 stack
+add 5 6 5
+lw 5 1 stack
+add 5 6 5
+lw 5 7 stack
+jalr 7 6
+n .fill 7
+r .fill 3
 result .fill 0
-mcand .fill 2
-mplier .fill 8
-bitExpo .fill 1 
-cntLoop .fill 16
+comAdr .fill combi
+stackPointer .fill 0
+pos1 .fill 1
 neg1 .fill -1
+stack .fill 0
+stack .fill 0
+stack .fill 0
+stack .fill 0
+stack .fill 0
+stack .fill 0
+stack .fill 0
+stack .fill 0
+stack .fill 0
+stack .fill 0
+stack .fill 0
+stack .fill 0
+stack .fill 0
+stack .fill 0
+stack .fill 0
+stack .fill 0
+stack .fill 0
+stack .fill 0
+stack .fill 0
+stack .fill 0
+stack .fill 0
+stack .fill 0
+stack .fill 0
+stack .fill 0
+stack .fill 0
+stack .fill 0
+stack .fill 0
+stack .fill 0
