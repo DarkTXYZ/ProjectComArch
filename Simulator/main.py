@@ -19,9 +19,10 @@ count = 0
 def inputFromAssembler():
     global memory
     input_split = file_read.split("\n")
+    for i in range(8):
+        REGISTER.append(0)
     for i in range(len(input_split)):
         memory.append(int(input_split[i]))
-        REGISTER.append(0)
     # print(REGISTER)
 
 #! 2’s complement
