@@ -8,7 +8,7 @@ file = open("C:\\Users\Acer\OneDrive - Chiang Mai University\Desktop\Com Archiet
 file_read = file.read()
 
 #! variable
-REGISTER = [0 , 0 , 0 , 0 , 0 , 0 , 0 , 0]
+REGISTER = []
 memory = []
 pc = 0
 instruction_execute= 0
@@ -21,6 +21,8 @@ def inputFromAssembler():
     input_split = file_read.split("\n")
     for i in range(len(input_split)):
         memory.append(int(input_split[i]))
+        REGISTER.append(0)
+    # print(REGISTER)
 
 #! 2’s complement
 def two2dec(s):
@@ -114,10 +116,10 @@ def printState():
     print("@@@" + "\n" + "state:")
     print("\t PC " + str(pc))
     print("\t memory:")
-    for i in range(10):
+    for i in range(len(memory)):
         print("\t\t mem[" + str(i) + "] " + str(memory[i]))
     print("\t register:")
-    for i in range(8):
+    for i in range(len(REGISTER)):
         print("\t\t register[" + str(i) + "] " + str(REGISTER[i]))
     print("end state\n")
     # pc += 1
