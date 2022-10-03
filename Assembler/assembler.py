@@ -92,10 +92,13 @@ def I_type(op, f0, f1, f2):
 #                Bits 18-16 reg B (rd)
 #                Bits 15-0 ไม่ใช้ (ควรตั้งไว้ที่ 0)
 def J_type(f0, f1):
+    # generate jalr op code
+    # generate f0 , f1 binary code
     bit24_22 = int('101' , 2) << 22
     bit21_19 = int(f0) << 19
     bit18_16 = int(f1) << 16
 
+    # instruction machine code
     bit = (bit24_22) + (bit21_19) + (bit18_16)
 
     return (bit)
@@ -104,10 +107,10 @@ def J_type(f0, f1):
 #                Bits 24-22 opcode
 #                Bits 21-0 ไม่ใช้ (ควรตั้งไว้ที่ 0)
 def O_type(op):
+    # generate op code
     bit = 0
     if op == 'halt':
         bit = int('110',2) << 22
-
     elif op == 'noop':
         bit = int('111',2) << 22
     

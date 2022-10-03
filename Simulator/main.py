@@ -1,11 +1,9 @@
 # display32bit(REGISTER[0])
 
 #! open in your file directory
-from asyncio.windows_events import NULL
-
-
-file = open("C:\\Users\Acer\OneDrive - Chiang Mai University\Desktop\Com Archietecture\Project(PHP 8.4)\ProjectComArch\Simulator\input.txt", "r")
+file = open("Simulator\input.txt", "r")
 file_read = file.read()
+output = open("Simulator\output.txt", "w")
 
 #! variable
 REGISTER = []
@@ -18,7 +16,7 @@ count = 0
 #! read from .txt
 def inputFromAssembler():
     global memory
-    input_split = file_read.split("\n")
+    input_split = file_read.split()
     for i in range(8):
         REGISTER.append(0)
     for i in range(len(input_split)):
@@ -104,6 +102,11 @@ def op_halt():
     print("machine halted")
     print("total of ", count, " instructions executed")
     print("final state of machine: \n")
+    
+    output.write("machine halted\n")
+    output.write("total of " + str(count) + " instructions executed\n")
+    output.write("final state of machine:\n\n")
+    
     printState()
     # return True
 
@@ -124,6 +127,16 @@ def printState():
         print("\t\t register[" + str(i) + "] " + str(REGISTER[i]))
     print("end state\n")
     # pc += 1
+    
+    output.write("@@@" + "\n" + "state:\n")
+    output.write("\tpc " + str(pc) + '\n')
+    output.write("\tmemory:\n")
+    for i in range(len(memory)):
+        output.write("\t\tmem[ " + str(i) + " ] " + str(memory[i]) + '\n')
+    output.write("\tregisters:\n")
+    for i in range(len(REGISTER)):
+        output.write("\t\treg[ " + str(i) + " ] " + str(REGISTER[i]) + '\n')
+    output.write("end state\n\n")
 
 def machinecodereader(input):
     REGISTER[0] = 0
@@ -155,17 +168,17 @@ def machinecodereader(input):
         else:
             op_sw(int_rs, int_rd, int_off)
     elif ( str_input[7] == '1' and str_input[8] == '0') :
+        str_off = str_input[16:32]
+        str_rs = str_input[10:13]
+        str_rd = str_input[13:16]
+        int_off = two2dec(str_off)
+        int_rs = int(str_rs , 2)
+        int_rd = int(str_rd , 2)
+            
         if (str_input[9] == '0') :
-            str_off = str_input[16:32]
-            str_rs = str_input[10:13]
-            str_rd = str_input[13:16]
-            int_off = two2dec(str_off)
-            int_rs = int(str_rs , 2)
-            int_rd = int(str_rd , 2)
-
             op_beq(int_rs, int_rd, int_off)
         else:
-            print("jalr")
+            op_jalr(int_rs , int_rd)
     elif ( str_input[7] == '1' and str_input[8] == '1') :
         if (str_input[9] == '0') :
              # print("halt")
@@ -176,7 +189,7 @@ def machinecodereader(input):
             op_noop()
     else : 
         pass
-        print("in this")
+        # print("in this")
     return stop_loop
 
 

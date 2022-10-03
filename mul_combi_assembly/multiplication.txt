@@ -19,8 +19,8 @@ beq 5 0 skipToHalt      if cntLoop = 0 exit loop
 beq 0 0 for            else continue loop
 skipToHalt halt         ends program
 result .fill 0
-mcand .fill 2
-mplier .fill 8
+mcand .fill 32766
+mplier .fill 10383
 bitExpo .fill 1 
 cntLoop .fill 16
 neg1 .fill -1
