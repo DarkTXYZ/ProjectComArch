@@ -1,8 +1,6 @@
-from assembler import Assembler
+from machine_code_generator import MachineCodeGenerator
 
-a = Assembler(['.fill' , '32'])
-print(bin(a))
-
+MachineCodeGenerator()
 
 # undefine label
 # same label
