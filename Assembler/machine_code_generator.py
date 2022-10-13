@@ -34,10 +34,9 @@ def MachineCodeGenerator() :
                     exit(1)
                 else:
                     labelMapping.update({line[0]: count})
-            # else:
-            #     print("label already define"+line[0])
+            else:
+                print("label already define: "+line[0])
         count += 1
-    # print(labelMapping)
     count = 0
 
     # Input Loop
