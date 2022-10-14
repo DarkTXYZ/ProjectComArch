@@ -1,6 +1,4 @@
 #! open in your file directory
-
-
 #! variable
 output = None
 REGISTER = []
@@ -9,7 +7,6 @@ pc = 0
 instruction_execute = 0
 count = 0
 
-#! read from .txt
 
 
 def inputFromAssembler(): #assign text from assembler to memory
@@ -123,7 +120,11 @@ def printState(): #printState func
         output.write("\t\treg[ " + str(i) + " ] " + str(REGISTER[i]) + '\n')
     output.write("end state\n\n")
 
-
+def printHeader():
+    for i in range(len(memory)): #loop of represent value in memory list
+        output.write("memory[" + str(i) + "]=" + str(memory[i]) + '\n')
+    for i in range(2):
+        output.write('\n')
 def machinecodereader(input):
     REGISTER[0] = 0
     str_input = '{:032b}'.format(input)
@@ -176,11 +177,11 @@ def machinecodereader(input):
 
 def run_simulator(): #main func of simulator
     global output
-    output = open("simulator_output.txt", "w")
-    
+    output = open("simulator_output.txt", "w") #read file from text
     inputFromAssembler()
+    printHeader()
     printState()
-
+    
     global pc
     while(True): #while loop until return of machinecodereader func is true
         stop_loop = machinecodereader(int(memory[pc]))
