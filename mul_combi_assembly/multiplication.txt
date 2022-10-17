@@ -1,26 +1,26 @@
-lw 0 1 result 
-lw 0 2 mcand
-lw 0 3 mplier
-lw 0 4 bitEx
-lw 0 5 cntLP
-lw 0 6 neg1
-beq 2 0 skip      check if mcand is 0
-beq 3 0 skip      check if mplier is 0
-for nand 3 4 7          check each bit of mplier is 1 or not
-nand 7 7 7              
-beq 7 4 added           if bit == 1 we add mcand to result
-rs add 4 4 4            bitEx = bitEx * 2
-add 2 2 2               mcand = mcand * 2
-beq 0 0 endfor         go next loop
-added add 1 2 1         add mcand to result
-beq 0 0 rs              go back to rs
-endfor add 5 6 5        cntLP = cntLP - 1
-beq 5 0 skip      if cntLP = 0 exit loop
-beq 0 0 for            else continue loop
-skip halt         ends program
-result .fill 0
-mcand .fill 32766
-mplier .fill 10383
-bitEx .fill 1 
-cntLP .fill 16
-neg1 .fill -1
+        lw 0 1 result           load data from memory to registers
+        lw 0 2 mcand
+        lw 0 3 mplier
+        lw 0 4 bitEx
+        lw 0 5 cntLP
+        lw 0 6 neg1
+        beq 2 0 skip            check if mcand or mplier is 0 
+        beq 3 0 skip            
+for     nand 3 4 7              check each bit of mplier is 1 or not
+        nand 7 7 7              
+        beq 7 4 added           if bit == 1, we add mcand to result
+rs      add 4 4 4               bitEx = bitEx * 2
+        add 2 2 2               mcand = mcand * 2
+        beq 0 0 endfor          go next loop
+added   add 1 2 1               add mcand to result
+        beq 0 0 rs              go back to rs
+endfor  add 5 6 5               decrease the loop counter by 1
+        beq 5 0 skip            if cntLP = 0, ends loop
+        beq 0 0 for             else continue loop
+skip    halt                    ends program
+result  .fill 0                 
+mcand   .fill 32766             multiplicand input
+mplier  .fill 10383             multiplier input
+bitEx   .fill 1 
+cntLP   .fill 16
+neg1    .fill -1
