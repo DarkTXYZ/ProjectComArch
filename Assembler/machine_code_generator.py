@@ -30,7 +30,10 @@ def MachineCodeGenerator() :
         if (line[0] not in operations):
             if(line[0] not in labelMapping):
                 if(len(line) == 1):
-                    print("wrong opcode: probably input only a label no op")
+                    print("wrong opcode: probably input only a label no opeation")
+                    exit(1)
+                elif(len(line[0])>6):
+                    print("label exceeds 6 character")
                     exit(1)
                 else:
                     labelMapping.update({line[0]: count})
@@ -52,13 +55,15 @@ def MachineCodeGenerator() :
         # without label      opcode      field1
         if(line[0] in labelMapping):
             isLabel = 1
-
+        if(isLabel == 1 and line[1] in operations):
+            print("label cannot be operation")
+            exit(1)
         # check if opcode is known in requirement
         if(line[isLabel] not in operations):
             print("wrong opcode")
             exit(1)
         # check offset field
-        if(line[isLabel] in branchOP and line[isLabel+3].isnumeric()):
+        if(line[isLabel] in branchOP and numcheck(line[isLabel+3])):
             lowest = -32768
             if(int(line[3+isLabel]) < lowest or int(line[3+isLabel]) > 32767):
                 print("too greedy")
