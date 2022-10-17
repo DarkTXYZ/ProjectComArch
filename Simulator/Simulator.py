@@ -19,7 +19,7 @@ def inputFromAssembler(): #assign text from assembler to memory
         REGISTER.append(0) #push 0 to register list
     for i in range(len(input_split)):
         memory.append(int(input_split[i])) #push text that split by \n to memory list
-    
+
     file.close() #close file
 
 
@@ -54,6 +54,8 @@ def op_lw(regA, regB, offset): #load word operator
     pc += 1
     count += 1
     global REGISTER #call register variable from global
+    while REGISTER[regA] + offset >= len(memory) :
+        memory.append(0)
     REGISTER[regB] = memory[(REGISTER[regA] + offset)] #load memory[(REGISTER[regA] + offset)] to register[regB]
     printState() #call printState func
 
@@ -63,6 +65,8 @@ def op_sw(regA, regB, offset): #store word operator
     pc += 1
     count += 1
     global REGISTER #call register variable from global
+    while REGISTER[regA] + offset >= len(memory) :
+        memory.append(0)
     memory[REGISTER[regA] + offset] = REGISTER[regB] #load register[regB] to memory[REGISTER[regA] + offset]
     printState() #call printState func
 

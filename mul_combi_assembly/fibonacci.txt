@@ -36,37 +36,10 @@ return  lw 0 6 neg1
         add 5 6 5
         lw 5 7 stack        load return address from stack
         jalr 7 6            jump back to return address
-n       .fill 0             n input
+n       .fill 10             n input
 result  .fill 0
 fiboAd  .fill fibo          Fibonacci function address
 stackP  .fill 0             stack pointer
 pos1    .fill 1             +1
 neg1    .fill -1            -1
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
 stack   .fill 0

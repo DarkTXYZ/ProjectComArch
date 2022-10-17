@@ -47,30 +47,3 @@ stackP  .fill 0             stack pointer
 pos1    .fill 1             +1
 neg1    .fill -1            -1
 stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
-stack   .fill 0
