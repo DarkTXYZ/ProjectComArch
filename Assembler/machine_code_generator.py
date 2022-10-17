@@ -21,6 +21,9 @@ def MachineCodeGenerator() :
             isNumber = False
         return isNumber
 
+    if len(readIn) > 65536 :
+        print('instructions number exceeded')
+        exit(1)
 
     # Mapping Loop
     # loop whole input to extract label and it's memory
