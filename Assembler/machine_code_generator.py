@@ -21,6 +21,7 @@ def MachineCodeGenerator() :
             isNumber = False
         return isNumber
 
+    # Verify if the number of instructions exceeds 65536 or not.
     if len(readIn) > 65536 :
         print('instructions number exceeded')
         exit(1)

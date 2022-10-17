@@ -91,7 +91,7 @@ def op_jalr(regA, regB): #jalr operator
     global REGISTER #call register variable from global
     global pc, count #call pc & count variable from global
     count += 1
-    if(REGISTER[regA] == REGISTER[regB]): #compare value of register[regA] and register[regB]
+    if(regA == regB): #compare if regA and regB is the same register
         REGISTER[regB] = pc+1 #if equal do register[regB] = pc+1
         pc = pc+1
     else:
@@ -198,7 +198,10 @@ def run_simulator(): #main func of simulator
             break
         elif count >= 5000: #check if count >= 5000 than break the loop
             print("infinite loop")
-            break
+            exit(1)
+        elif pc < 0 or pc > 65535 :
+            print("Jump index out of range")
+            exit(1)
 
     output.close()
 
