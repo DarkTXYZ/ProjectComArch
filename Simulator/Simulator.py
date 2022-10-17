@@ -85,7 +85,8 @@ def op_beq(regA, regB, offset): #branch equal operator
 
 def op_jalr(regA, regB): #jalr operator
     global REGISTER #call register variable from global
-    global pc #call pc variable from global
+    global pc, count #call pc & count variable from global
+    count += 1
     if(REGISTER[regA] == REGISTER[regB]): #compare value of register[regA] and register[regB]
         REGISTER[regB] = pc+1 #if equal do register[regB] = pc+1
         pc = pc+1
@@ -186,10 +187,12 @@ def run_simulator(): #main func of simulator
     printHeader()
     printState()
     
-    global pc
+    global pc, count
     while(True): #while loop until return of machinecodereader func is true
         stop_loop = machinecodereader(int(memory[pc]))
         if stop_loop == True:
+            break
+        elif count >= 5000: #check if count >= 5000 than break the loop
             break
 
     output.close()
