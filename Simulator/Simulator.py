@@ -76,7 +76,11 @@ def op_beq(regA, regB, offset): #branch equal operator
     global pc, count #call pc, count variable from global
     count += 1
     if(REGISTER[regA] == REGISTER[regB]): #compare value of register[regA] and register[regB]
-        pc = pc+1+offset #if equal do pc += 1+offset
+        if(pc+1+offset >= 0 and pc+1+offset <=65535):
+            pc = pc+1+offset #if equal do pc += 1+offset
+        else:
+            print("Jump index out of range")
+            exit(1)
         printState() #call printState func
     else:
         pc += 1
@@ -86,7 +90,7 @@ def op_beq(regA, regB, offset): #branch equal operator
 def op_jalr(regA, regB): #jalr operator
     global REGISTER #call register variable from global
     global pc #call pc variable from global
-    if(REGISTER[regA] == REGISTER[regB]): #compare value of register[regA] and register[regB]
+    if(regA == regB): #compare if regA and regB are the same register
         REGISTER[regB] = pc+1 #if equal do register[regB] = pc+1
         pc = pc+1
     else:
