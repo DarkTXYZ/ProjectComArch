@@ -193,6 +193,7 @@ def run_simulator(): #main func of simulator
         if stop_loop == True:
             break
         elif count >= 5000: #check if count >= 5000 than break the loop
+            print("infinite loop")
             break
 
     output.close()
