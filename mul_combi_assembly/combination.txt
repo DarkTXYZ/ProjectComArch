@@ -1,8 +1,6 @@
         lw 0 1 n            load data from memory to registers
         lw 0 2 r
-        lw 0 3 result
         lw 0 6 comAdr
-        lw 0 5 stackP
         jalr 6 7            call combi(n,r)
         halt                ends program
 combi   sw 5 7 stack        store return address to stack
@@ -20,13 +18,12 @@ combi   sw 5 7 stack        store return address to stack
         add 1 6 1           n = n - 1
         lw 0 6 comAdr
         jalr 6 7            call combi(n-1,r)
-        add 3 0 4           store return value of combi(n-1,r) to local variable
+        add 3 0 4           store return value of combi(n-1,r) and local variable to local variable
         lw 0 6 neg1
         add 2 6 2           r = r - 1
         lw 0 6 comAdr
         jalr 6 7            call combi(n-1,r-1)
-        add 3 4 4           add return value of combi(n-1,r-1) to local variable
-        add 4 0 3           store local variable value in result
+        add 3 4 3           add return value of combi(n-1,r-1) to result
         beq 0 0 return
 base    lw 0 3 pos1         if it is base case , return 1
 return  lw 0 6 neg1         
@@ -41,9 +38,7 @@ return  lw 0 6 neg1
         jalr 7 6            jump back to return address
 n       .fill 7             n input
 r       .fill 3             r input
-result  .fill 0
 comAdr  .fill combi         Combination function address
-stackP  .fill 0             stack pointer
 pos1    .fill 1             +1
 neg1    .fill -1            -1
 stack   .fill 0

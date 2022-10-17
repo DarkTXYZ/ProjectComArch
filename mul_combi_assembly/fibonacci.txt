@@ -1,6 +1,4 @@
         lw 0 1 n            load data from memory to registers
-        lw 0 3 result
-        lw 0 5 stackP
         lw 0 6 fiboAd
         jalr 6 7            call fibo(n)
         halt                ends program
@@ -22,8 +20,7 @@ fibo    sw 5 7 stack        store return address to stack
         add 1 6 1           n = n - 1
         lw 0 6 fiboAd
         jalr 6 7            call fibo(n-2)
-        add 3 4 4           add return value of fibo(n-2) to local variable
-        add 4 0 3           store local variable value in result
+        add 3 4 3           add return value of fibo(n-2) and local variable to result
         beq 0 0 return
 base1   lw 0 3 pos1         if it is base case (n=1) , return 1
         beq 0 0 return
@@ -37,9 +34,7 @@ return  lw 0 6 neg1
         lw 5 7 stack        load return address from stack
         jalr 7 6            jump back to return address
 n       .fill 10             n input
-result  .fill 0
 fiboAd  .fill fibo          Fibonacci function address
-stackP  .fill 0             stack pointer
 pos1    .fill 1             +1
 neg1    .fill -1            -1
 stack   .fill 0
