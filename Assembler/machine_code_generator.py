@@ -117,10 +117,10 @@ def MachineCodeGenerator() :
             operation.append(line[isLabel])
             # check for last field label
             if(numcheck(line[isLabel+1])):
-                if(int(line[isLabel+1]) >2147483647):
+                if(int(line[isLabel+1]) >32767):
                     print("number is out of range .fill")
                     exit(1)
-                elif(int(line[isLabel+1]) < -2147483648):
+                elif(int(line[isLabel+1]) < -32768):
                     print("number is out of range .fill")
                     exit(1)
                 else:
