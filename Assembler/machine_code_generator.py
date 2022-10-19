@@ -14,7 +14,7 @@ def MachineCodeGenerator() :
     branchOP = ["lw", "sw", "beq"]
     count = 0
     allLines = []
-
+    labelLine =[]
 
     def numcheck(s):
         try:
@@ -39,6 +39,7 @@ def MachineCodeGenerator() :
             if(len(line) == 1):
                     print("wrong opcode: probably input only a label no opeation")
                     exit(1)
+            #check wrong opcode
             if(line[1] not in operations):
                 print("wrong syntax: maybe inputing 2 label or wrong opcode")
                 exit(1)
@@ -57,15 +58,17 @@ def MachineCodeGenerator() :
                     exit(1)
                 else:
                     labelMapping.update({line[0]: count})
+                    labelLine.append(count)
             else:
                 print("label already define: "+line[0])
                 exit(1)
         count += 1
-
+        
     count = 0
 
     # Input Loop
     # loop whole input to make a list of string of opcode and field of each input line
+    labelcounter = 0
     for i in readIn:
         operation = []
         line = i.split()
@@ -75,7 +78,7 @@ def MachineCodeGenerator() :
         #                   line[0]     line[1]
         # with label         label       opcode
         # without label      opcode      field1
-        if(line[0] in labelMapping):
+        if(labelcounter in labelLine):
             isLabel = 1
         # check if opcode is known in requirement
         if(line[isLabel] not in operations):
@@ -90,6 +93,7 @@ def MachineCodeGenerator() :
         # spliting sessions
         # 3 field operation ex add r1 r2 r3
         if(line[isLabel] not in specialOP):
+            #check symbolic reg
             if(not numcheck(line[isLabel+1]) and not numcheck(line[isLabel+2]) ):
                 print("register cannot be symbolic")
                 exit(1)
@@ -105,8 +109,7 @@ def MachineCodeGenerator() :
                 if(line[isLabel+3] in labelMapping):
                     # branching have deferent value replacement (relatively)
                     if(line[isLabel] == 'beq'):
-                        operation.append(
-                            str(labelMapping[line[isLabel+3]]-count-1))
+                        operation.append(str(labelMapping[line[isLabel+3]]-count-1))
                     else:
                         operation.append(str(labelMapping[line[isLabel+3]]))
                 else:
@@ -134,6 +137,7 @@ def MachineCodeGenerator() :
         # 2 field operation
         elif line[isLabel] == "jalr":
             operation.append(line[isLabel])
+            #check symbolic reg
             if(not numcheck(line[isLabel+1])):
                 print("register cannot be symbolic")
                 exit(1)
@@ -154,6 +158,7 @@ def MachineCodeGenerator() :
             operation.append(line[isLabel])
         count += 1
         allLines.append(operation)
+        labelcounter +=1
 
     for i in allLines:
         machineCode = Assembler(i)
