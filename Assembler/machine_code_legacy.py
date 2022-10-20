@@ -1,4 +1,4 @@
-def MachineCodeGenerator() : 
+def MachineCodeGenerator():
     from Assembler.assembler import Assembler
 
     input = open('assembly_program.txt', 'r')
@@ -6,12 +6,12 @@ def MachineCodeGenerator() :
     readIn = input.readlines()
     labelMapping = {}
     operations = ["add", "nand", "lw", "sw",
-                "beq", "jalr", "halt", "noop", ".fill"]
+                  "beq", "jalr", "halt", "noop", ".fill"]
     specialOP = ["halt", "noop", ".fill", "jalr"]
     branchOP = ["lw", "sw", "beq"]
     count = 0
     allLines = []
-    labelLine =[]
+    labelLine = []
 
     def numcheck(s):
         try:
@@ -22,7 +22,7 @@ def MachineCodeGenerator() :
         return isNumber
 
     # Verify if the number of instructions exceeds 65536 or not.
-    if len(readIn) > 65536 :
+    if len(readIn) > 65536:
         print('instructions number exceeded')
         exit(1)
 
@@ -31,26 +31,26 @@ def MachineCodeGenerator() :
     for i in readIn:
         line = i.split()
         line[len(line)-1] = line[len(line)-1].replace("\n", "")
-        #check if 
+        # check if
         if (line[0] not in operations):
             if(len(line) == 1):
-                    print("wrong opcode: probably input only a label no opeation")
-                    exit(1)
-            #check wrong opcode
+                print("wrong opcode: probably input only a label no opeation")
+                exit(1)
+            # check wrong opcode
             if(line[1] not in operations):
                 print("wrong syntax: maybe inputing 2 label or wrong opcode")
                 exit(1)
             if(line[0] not in labelMapping):
-                #check if the line only has a label
+                # check if the line only has a label
                 if(len(line) == 1):
                     print("wrong opcode: probably input only a label no opeation")
                     exit(1)
-                #check if the first char is numberic
+                # check if the first char is numberic
                 elif(numcheck(line[0][0])):
                     print("first char is numberic")
                     exit(1)
-                #check if the label is longer than 6 char
-                elif(len(line[0])>6):
+                # check if the label is longer than 6 char
+                elif(len(line[0]) > 6):
                     print("label exceeds 6 character")
                     exit(1)
                 else:
@@ -60,7 +60,7 @@ def MachineCodeGenerator() :
                 print("label already define: "+line[0])
                 exit(1)
         count += 1
-        
+
     count = 0
 
     # Input Loop
@@ -90,11 +90,11 @@ def MachineCodeGenerator() :
         # spliting sessions
         # 3 field operation ex add r1 r2 r3
         if(line[isLabel] not in specialOP):
-            #check symbolic reg
-            if(not numcheck(line[isLabel+1]) and not numcheck(line[isLabel+2]) ):
+            # check symbolic reg
+            if(not numcheck(line[isLabel+1]) and not numcheck(line[isLabel+2])):
                 print("register cannot be symbolic")
                 exit(1)
-            if(int(line[isLabel+1]) > 7  or int(line[isLabel+2]) >7):
+            if(int(line[isLabel+1]) > 7 or int(line[isLabel+2]) > 7):
                 print("register out of range")
             operation.append(line[isLabel])
             operation.append(line[isLabel+1])
@@ -106,7 +106,8 @@ def MachineCodeGenerator() :
                 if(line[isLabel+3] in labelMapping):
                     # branching have deferent value replacement (relatively)
                     if(line[isLabel] == 'beq'):
-                        operation.append(str(labelMapping[line[isLabel+3]]-count-1))
+                        operation.append(
+                            str(labelMapping[line[isLabel+3]]-count-1))
                     else:
                         operation.append(str(labelMapping[line[isLabel+3]]))
                 else:
@@ -117,7 +118,7 @@ def MachineCodeGenerator() :
             operation.append(line[isLabel])
             # check for last field label
             if(numcheck(line[isLabel+1])):
-                if(int(line[isLabel+1]) >32767):
+                if(int(line[isLabel+1]) > 32767):
                     print("number is out of range .fill")
                     exit(1)
                 elif(int(line[isLabel+1]) < -32768):
@@ -134,7 +135,7 @@ def MachineCodeGenerator() :
         # 2 field operation
         elif line[isLabel] == "jalr":
             operation.append(line[isLabel])
-            #check symbolic reg
+            # check symbolic reg
             if(not numcheck(line[isLabel+1])):
                 print("register cannot be symbolic")
                 exit(1)
@@ -155,13 +156,13 @@ def MachineCodeGenerator() :
             operation.append(line[isLabel])
         count += 1
         allLines.append(operation)
-        labelcounter +=1
+        labelcounter += 1
 
     for i in allLines:
         machineCode = Assembler(i)
         print(i)
         print(machineCode)
         output.write(str(machineCode) + '\n')
-        
+
     input.close()
     output.close()
